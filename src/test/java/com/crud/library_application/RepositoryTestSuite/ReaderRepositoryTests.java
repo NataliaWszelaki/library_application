@@ -100,4 +100,18 @@ public class ReaderRepositoryTests {
         Reader reader1 = readerRepository.findById(id).orElse(null);
         assertNull(reader1);
     }
+
+    @Test
+    void testExistsByNameAndSurname() {
+
+        //When
+        boolean isExisting = readerRepository.existsByNameAndSurname(reader.getName(), reader.getSurname());
+
+        //Then
+        assertTrue(isExisting);
+
+        //CleanUp
+        Long id = reader.getId();
+        readerRepository.deleteById(id);
+    }
 }

@@ -1,16 +1,12 @@
 package com.crud.library_application.RepositoryTestSuite;
 
-import com.crud.library_application.domain.BookCopy;
 import com.crud.library_application.domain.BookTitle;
-import com.crud.library_application.domain.LoanStatus;
-import com.crud.library_application.repository.BookCopyRepository;
 import com.crud.library_application.repository.BookTitleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +18,11 @@ public class BookTitleRepositoryTests {
     @Autowired
     private BookTitleRepository bookTitleRepository;
 
-    @Autowired
-    private BookCopyRepository bookCopyRepository;
-
     private BookTitle bookTitle;
 
     @BeforeEach
     void setUp() {
-        bookTitle = new BookTitle("Biohacking", "John Smith", LocalDate.of(1999, 12, 12));
+        bookTitle = new BookTitle("Biohacking", "John Smith", 1999);
         bookTitleRepository.save(bookTitle);
     }
 
@@ -59,7 +52,7 @@ public class BookTitleRepositoryTests {
         assertEquals(bookTitle.getId(), foundBookTitle.getId());
         assertEquals(bookTitle.getTitle(), foundBookTitle.getTitle());
         assertEquals(bookTitle.getAuthorName(), foundBookTitle.getAuthorName());
-        assertEquals(bookTitle.getBookPublicationDate(), foundBookTitle.getBookPublicationDate());
+        assertEquals(bookTitle.getBookPublicationYear(), foundBookTitle.getBookPublicationYear());
 
         //CleanUp
         Long id = foundBookTitle.getId();
@@ -106,5 +99,39 @@ public class BookTitleRepositoryTests {
         //Then
         BookTitle bookTitle1 = bookTitleRepository.findById(id).orElse(null);
         assertNull(bookTitle1);
+    }
+
+    @Test
+    void testExistsByTitleAndAuthorNameAndBookPublicationYear() {
+
+        //When
+        boolean isExisting = bookTitleRepository.existsByTitleAndAuthorNameAndBookPublicationYear(
+                bookTitle.getTitle(), bookTitle.getAuthorName(), bookTitle.getBookPublicationYear());
+
+        //Then
+        assertTrue(isExisting);
+
+        //CleanUp
+        Long id = bookTitle.getId();
+        bookTitleRepository.deleteById(id);
+    }
+
+    @Test
+    void testFindByTitleAndAuthorNameAndBookPublicationYear() {
+
+        //When
+        BookTitle foundBookTitle = bookTitleRepository.findByTitleAndAuthorNameAndBookPublicationYear(
+                bookTitle.getTitle(), bookTitle.getAuthorName(), bookTitle.getBookPublicationYear()).orElse(null);
+        assertNotNull(foundBookTitle);
+
+        //Then
+        assertEquals(bookTitle.getId(), foundBookTitle.getId());
+        assertEquals(bookTitle.getTitle(), foundBookTitle.getTitle());
+        assertEquals(bookTitle.getAuthorName(), foundBookTitle.getAuthorName());
+        assertEquals(bookTitle.getBookPublicationYear(), foundBookTitle.getBookPublicationYear());
+
+        //CleanUp
+        Long id = foundBookTitle.getId();
+        bookTitleRepository.deleteById(id);
     }
 }

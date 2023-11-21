@@ -9,4 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ReaderRepository extends JpaRepository<Reader, Long> {
 
+    boolean existsByNameAndSurname(String name, String surname);
 }

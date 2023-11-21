@@ -1,6 +1,6 @@
 package com.crud.library_application.domain;
 
-public enum LoanStatus {
+public enum BookCopyStatus {
 
     AVAILABLE,
     BORROWED,

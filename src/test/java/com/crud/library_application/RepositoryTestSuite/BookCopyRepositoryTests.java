@@ -2,7 +2,7 @@ package com.crud.library_application.RepositoryTestSuite;
 
 import com.crud.library_application.domain.BookCopy;
 import com.crud.library_application.domain.BookTitle;
-import com.crud.library_application.domain.LoanStatus;
+import com.crud.library_application.domain.BookCopyStatus;
 import com.crud.library_application.repository.BookCopyRepository;
 import com.crud.library_application.repository.BookTitleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +29,9 @@ public class BookCopyRepositoryTests {
 
     @BeforeEach
     void setUp() {
-        bookTitle = new BookTitle("Biohacking", "John Smith", LocalDate.of(2000, 1, 1));
+        bookTitle = new BookTitle("Biohacking", "John Smith", 2020);
         bookTitleRepository.save(bookTitle);
-        bookCopy = new BookCopy(bookTitle, LoanStatus.AVAILABLE);
+        bookCopy = new BookCopy(bookTitle, BookCopyStatus.AVAILABLE);
         bookCopyRepository.save(bookCopy);
     }
 
@@ -61,7 +60,7 @@ public class BookCopyRepositoryTests {
         //Then
         assertEquals(bookCopy.getId(), foundBookCopy.getId());
         assertEquals(bookCopy.getBookTitle().getTitle(), foundBookCopy.getBookTitle().getTitle());
-        assertEquals(bookCopy.getLoanStatus(), foundBookCopy.getLoanStatus());
+        assertEquals(bookCopy.getBookCopyStatus(), foundBookCopy.getBookCopyStatus());
 
         //CleanUp
         Long id = foundBookCopy.getId();
@@ -87,13 +86,13 @@ public class BookCopyRepositoryTests {
     void testUpdate() {
 
         //When
-        bookCopy.setLoanStatus(LoanStatus.LOST);
+        bookCopy.setBookCopyStatus(BookCopyStatus.LOST);
         bookCopyRepository.save(bookCopy);
         BookCopy updatedBookCopy = bookCopyRepository.findById(bookCopy.getId()).orElse(null);
         assertNotNull(updatedBookCopy);
 
         //Then
-        assertEquals(LoanStatus.LOST, updatedBookCopy.getLoanStatus());
+        assertEquals(BookCopyStatus.LOST, updatedBookCopy.getBookCopyStatus());
 
         //CleanUp
         Long id = updatedBookCopy.getId();
@@ -116,7 +115,7 @@ public class BookCopyRepositoryTests {
     void testRelationBookTitleBookCopy() {
 
         //Given
-        BookCopy bookCopy2 = new BookCopy(bookTitle, LoanStatus.LOST);
+        BookCopy bookCopy2 = new BookCopy(bookTitle, BookCopyStatus.LOST);
         bookCopyRepository.save(bookCopy2);
 
         //When
@@ -133,7 +132,7 @@ public class BookCopyRepositoryTests {
         //Then
         assertNotEquals(bookCopyTheSameTitle.getId(), bookCopyTheSameTitle2.getId());
         assertEquals(bookCopyTheSameTitle.getBookTitle().getTitle(), bookCopyTheSameTitle2.getBookTitle().getTitle());
-        assertNotEquals(bookCopyTheSameTitle.getLoanStatus(), bookCopyTheSameTitle2.getLoanStatus());
+        assertNotEquals(bookCopyTheSameTitle.getBookCopyStatus(), bookCopyTheSameTitle2.getBookCopyStatus());
         assertNotNull(bookTitleWithBookCopies.getBookCopyList());
 
         //CleanUp

@@ -1,7 +1,5 @@
 package com.crud.library_application.domain;
 
-import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +16,8 @@ import java.util.List;
 @Table(name = "READERS")
 public class Reader {
 
-
     @Id
-    @GeneratedValue
-    @NotNull
-    @Column(name = "ID", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "NAME")

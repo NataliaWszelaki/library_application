@@ -38,9 +38,9 @@ public class BookLoanRepositoryTests {
 
     @BeforeEach
     void setUp() {
-        bookTitle = new BookTitle("Biohacking", "John Smith", LocalDate.of(2000, 1, 1));
+        bookTitle = new BookTitle("Biohacking", "John Smith", 2000);
         bookTitleRepository.save(bookTitle);
-        bookCopy = new BookCopy(bookTitle, LoanStatus.AVAILABLE);
+        bookCopy = new BookCopy(bookTitle, BookCopyStatus.AVAILABLE);
         bookCopyRepository.save(bookCopy);
         reader = new Reader("John", "Smith", LocalDate.of(2021, 12, 12));
         readerRepository.save(reader);
@@ -72,7 +72,7 @@ public class BookLoanRepositoryTests {
 
         //Then
         assertEquals(bookLoan.getId(), foundBookLoan.getId());
-        assertEquals(bookLoan.getBookCopy().getLoanStatus(), foundBookLoan.getBookCopy().getLoanStatus());
+        assertEquals(bookLoan.getBookCopy().getBookCopyStatus(), foundBookLoan.getBookCopy().getBookCopyStatus());
         assertEquals(bookLoan.getReader().getName(), foundBookLoan.getReader().getName());
         assertEquals(bookLoan.getBookBorrowDate(), foundBookLoan.getBookBorrowDate());
         assertEquals(bookLoan.getBookReturnDate(), foundBookLoan.getBookReturnDate());
@@ -148,7 +148,7 @@ public class BookLoanRepositoryTests {
         //Then
         assertEquals("John", bookLoanWithAllData.getReader().getName());
         assertEquals("John Smith", bookLoanWithAllData.getBookCopy().getBookTitle().getAuthorName());
-        assertEquals(LoanStatus.AVAILABLE, bookLoanWithAllData.getBookCopy().getLoanStatus());
+        assertEquals(BookCopyStatus.AVAILABLE, bookLoanWithAllData.getBookCopy().getBookCopyStatus());
         assertNotNull(readerWithAllData.getBookLoanList());
         assertNotNull(bookCopyWithAllData.getBookLoanList());
         assertNotNull(bookTitleWithAllData.getBookCopyList());

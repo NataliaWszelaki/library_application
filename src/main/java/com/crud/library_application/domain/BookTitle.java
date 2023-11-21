@@ -1,12 +1,10 @@
 package com.crud.library_application.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +16,7 @@ import java.util.List;
 public class BookTitle {
 
     @Id
-    @GeneratedValue
-    @NotNull
-    @Column(name = "ID", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "TITLE")
@@ -29,8 +25,8 @@ public class BookTitle {
     @Column(name = "AUTHOR_NAME")
     private String authorName;
 
-    @Column(name = "BOOK_PUBLICATION_DATE")
-    private LocalDate bookPublicationDate;
+    @Column(name = "BOOK_PUBLICATION_YEAR")
+    private Integer bookPublicationYear;
 
     @OneToMany(
         targetEntity = BookCopy.class,
@@ -40,9 +36,9 @@ public class BookTitle {
     )
     private List<BookCopy> bookCopyList = new ArrayList<>();
 
-    public BookTitle(String title, String authorName, LocalDate bookPublicationDate) {
+    public BookTitle(String title, String authorName, Integer bookPublicationYear) {
         this.title = title;
         this.authorName = authorName;
-        this.bookPublicationDate = bookPublicationDate;
+        this.bookPublicationYear = bookPublicationYear;
     }
 }

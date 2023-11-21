@@ -1,11 +1,11 @@
 package com.crud.library_application.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +17,7 @@ import java.util.List;
 public class BookCopy {
 
     @Id
-    @GeneratedValue
-    @NotNull
-    @Column(name = "ID", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -27,8 +25,9 @@ public class BookCopy {
     private BookTitle bookTitle;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "LOAN_STATUS")
-    private LoanStatus loanStatus;
+    @NotNull
+    @Column(name = "COPY_BOOK_STATUS")
+    private BookCopyStatus bookCopyStatus;
 
     @OneToMany(
             targetEntity = BookLoan.class,
@@ -38,8 +37,14 @@ public class BookCopy {
     )
     private List<BookLoan> bookLoanList = new ArrayList<>();
 
-    public BookCopy(BookTitle bookTitle, LoanStatus loanStatus) {
+    public BookCopy(Long id, BookTitle bookTitle, BookCopyStatus bookCopyStatus) {
+        this.id = id;
         this.bookTitle = bookTitle;
-        this.loanStatus = loanStatus;
+        this.bookCopyStatus = bookCopyStatus;
+    }
+
+    public BookCopy(BookTitle bookTitle, BookCopyStatus bookCopyStatus) {
+        this.bookTitle = bookTitle;
+        this.bookCopyStatus = bookCopyStatus;
     }
 }
